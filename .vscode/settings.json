@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./Code/Preprocess"
+        "./Code/Preprocess",
+        "./Code/Models"
     ]
 }

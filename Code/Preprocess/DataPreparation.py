@@ -1,7 +1,7 @@
 import sys
-sys.path.append('../')
+sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 
-from Preprocess.preprocess import Preprocess
+from preprocess import Preprocess
 
 class dataPrepare:
     '''
@@ -25,7 +25,7 @@ class dataPrepare:
         self.feature = vec.fit_transform(self.data.CONTENT)
         
         # Printing the shape of our features
-        print(f'Shape of our fearture is {self.feature.shape}')
+        # print(f'Shape of our fearture is {self.feature.shape}')
 
         # Train test split our data
         from sklearn.model_selection import train_test_split
