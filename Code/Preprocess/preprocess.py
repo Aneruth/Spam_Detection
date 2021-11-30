@@ -52,11 +52,3 @@ class Preprocess:
         self.stopWordsRemove = [self.stemmer.stem(i) for i in self.stopWordsRemove]
         self.dataset.CONTENT = self.stopWordsRemove
         return self.dataset
-
-
-''' Testing '''
-if __name__ == '__main__':
-
-    data = Preprocess()
-    # testing
-    print(data.preprocessMethod('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Data/Youtube01-Psy.csv'))
