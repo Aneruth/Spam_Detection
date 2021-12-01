@@ -1,41 +1,44 @@
 import sys
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 from DataPreparation import dataPrepare
-# Importing the package for SVM algorithm
-from sklearn.svm import SVC
 
-class SupportVector:
-    
+#Import Gaussian Naive Bayes model
+from sklearn.naive_bayes import GaussianNB
+
+class Naive_Bayes:
+
     def __init__(self,path) -> None:
         self.path = path
-
-    def svm(self):
+    
+    def nb(self):
         
         fetchData = dataPrepare()
         self.X_train, self.X_test, self.y_train, self.y_test = fetchData.Vectorizer(self.path)
+
+        #Create a Gaussian Classifier
+        nb = GaussianNB()
+
+        # Train the model using the training sets
+        # https://stackoverflow.com/questions/30502284/a-sparse-matrix-was-passed-but-dense-data-is-required-use-x-toarray-to-conve/37248794
+        nb.fit(self.X_train.todense(),self.y_train)
+
+        nb_prediction = nb.predict(self.X_test.todense())
         
-        # Creating a support vector model
-        self.sv = SVC()
-
-        # Fitting our data
-        self.sv.fit(self.X_train,self.y_train)
-
-        # Predicting our SVM Model
-        self.SVMprediction = self.sv.predict(self.X_test)
-
-        return self.y_test,self.SVMprediction
+        # nb_accuracy_score = round(accuracy_score(y_test, nb_prediction)*100,2)
+        # print(f"Accuracy score for Naive bayes is: {nb_accuracy_score}%")
+        return self.y_test,nb_prediction
     
     def metrics(self):
         import matplotlib.pyplot as plt
 
-        self.y_test,self.SVMprediction = self.svm()
+        self.y_test,nb_prediction = self.nb()
 
         from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-        print(f'The confusion matrix for Support Vector Machine before hyper parameter tunning is \n{confusion_matrix(self.y_test,self.SVMprediction)}')
+        print(f'The confusion matrix for Support Vector Machine before hyper parameter tunning is \n{confusion_matrix(self.y_test,nb_prediction)}')
 
-        print(f'\n Classification report for Support Vector Machine before hyper parameter tunning is:\n{classification_report(self.y_test,self.SVMprediction)}')
+        print(f'\n Classification report for Support Vector Machine before hyper parameter tunning is:\n{classification_report(self.y_test,nb_prediction)}')
 
-        acc_score_before_hyper = round(accuracy_score(self.y_test,self.SVMprediction)*100,2)
+        acc_score_before_hyper = round(accuracy_score(self.y_test,nb_prediction)*100,2)
         print(f'Accuracy Score before hyper parameter tunning is: {acc_score_before_hyper}%')
 
         '''
@@ -47,7 +50,8 @@ class SupportVector:
         - More gamma more the curvature and less gamma less curvature.
         '''
         # Initialise the gird search variable 
-        pg = {"C":[0.1,1,10,100,1000],"gamma":[1,.1,.01,.001,.0001]}
+        import numpy as np
+        param_grid_nb = {'var_smoothing': np.logspace(0,-9, num=100)}
 
         '''
         Important parameter for grid search 
@@ -56,16 +60,16 @@ class SupportVector:
         '''
         from sklearn.model_selection import GridSearchCV
         # feed the search variable to the grid search 
-        grid = GridSearchCV(SVC(),pg,verbose=3,scoring='accuracy')
+        grid = GridSearchCV(estimator=GaussianNB(), param_grid=param_grid_nb, verbose=1, cv=10, n_jobs=-1)
 
         # Grid Search fixable
-        grid.fit(self.X_train,self.y_train)
+        grid.fit(self.X_train.todense(),self.y_train)
 
         # to get the best parameter fit from the grid
         print('The best parameter is:',grid.best_params_)
         
         # to get the predictions from the grid
-        grid_predict = grid.predict(self.X_test)
+        grid_predict = grid.predict(self.X_test.todense())
 
         # To print the classification report and confusion matrix for the SVM
         print('Report for Suport Vector Machine')
@@ -84,12 +88,12 @@ class SupportVector:
         n = ['Before Hyperparameter','After Hyperparameter']
         plt.figure(figsize=(12,6))
         plt.title('Graph to compare accuracy score before and after hyperparameter tunning')
-        plt.xlabel('SVM Algorithm')
+        plt.xlabel('Naive Bayes Algorithm')
         plt.ylabel('Accuracy Score')
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,((grid.best_score_)*100).round(2)])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/svmAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
