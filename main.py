@@ -1,7 +1,7 @@
 import sys,os
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Models')
 
-import SupportVectorMachine,NaiveBayes,RandomForest,Cnn
+import SupportVectorMachine,NaiveBayes,RandomForest,NeuralNetwork
 
 '''# SVM for all dataset
 for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
@@ -21,5 +21,5 @@ for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spa
 
 # Neural Netowork for all dataset
 for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-    nerural = Cnn.ConvNeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
+    nerural = NeuralNetwork.NeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
     nerural.cnn()
