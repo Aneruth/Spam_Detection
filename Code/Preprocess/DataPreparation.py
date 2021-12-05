@@ -56,11 +56,11 @@ class dataPrepare:
 
         return self.X,self.y
 
-# ''' Testing '''
-# if __name__ == '__main__':
+''' Testing '''
+if __name__ == '__main__':
 
-#     # testing
-#     # dataset = data.preprocessMethod()
-#     a,b,c,d = dataPrepare().vectorizer('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
-#     print(type(a),type(b),type(c),type(d))
-
+    # testing
+    # dataset = data.preprocessMethod()
+    a,b,c,d = dataPrepare().Vectorizer('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
+    # print(type(a),type(b),type(c),type(d))
+    print(a)
