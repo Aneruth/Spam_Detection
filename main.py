@@ -18,6 +18,8 @@ for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spa
 for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
     ml = RandomForest.randomForest('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
     ml.metrics()'''
+
+# Neural Netowork for all dataset
 for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
     nerural = Cnn.ConvNeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
     nerural.cnn()
