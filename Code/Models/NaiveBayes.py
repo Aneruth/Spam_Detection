@@ -76,10 +76,8 @@ class Naive_Bayes:
         # To print the confusion matrix
         print('The confusion matrix after grid search is:' + '\n \n',confusion_matrix(self.y_test,grid_predict))
 
-        print('\n')
-
         # To print the classification report
-        print('The classification report after grid search is:' + f'\n{classification_report(self.y_test,grid_predict)}')
+        print('\nThe classification report after grid search is:' + f'\n{classification_report(self.y_test,grid_predict)}')
 
         # to get the best score from the grid
         print('The best score is:',((grid.best_score_)*100).round(2),'%')
@@ -97,3 +95,4 @@ class Naive_Bayes:
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+        return ((grid.best_score_)*100).round(2)

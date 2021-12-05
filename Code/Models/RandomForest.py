@@ -73,3 +73,4 @@ class randomForest:
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+        return acc_score_after_hyper

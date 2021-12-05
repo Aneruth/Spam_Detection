@@ -7,7 +7,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 import warnings
 warnings.filterwarnings("ignore")
-class ConvNeuralNet:
+class NeuralNet:
 
     def __init__(self,path) -> None:
         self.path = path 
@@ -60,6 +60,7 @@ class ConvNeuralNet:
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+        return acc
 
 
 '''if __name__ == '__main__':
