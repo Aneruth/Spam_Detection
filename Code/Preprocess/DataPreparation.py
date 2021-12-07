@@ -37,13 +37,30 @@ class dataPrepare:
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,self.y, test_size=0.3)
 
         return self.X_train, self.X_test, self.y_train, self.y_test
+    
+    def deepLearningInput(self,path):
+        from sklearn.feature_extraction.text import TfidfVectorizer
         
+        vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
 
-# ''' Testing '''
-# if __name__ == '__main__':
+        self.data = Preprocess()
+        self.data = self.data.preprocessMethod(path)
+        
+        self.feature = vec.fit_transform(self.data.CONTENT)
 
-#     # testing
-#     # dataset = data.preprocessMethod()
-#     a,b,c,d = dataPrepare().vectorizer('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
-#     print(type(a),type(b),type(c),type(d))
+        # Train test split our data
+        from sklearn.model_selection import train_test_split
 
+        self.X = self.feature
+        self.y = self.data.CLASS
+
+        return self.X,self.y
+
+''' Testing '''
+if __name__ == '__main__':
+
+    # testing
+    # dataset = data.preprocessMethod()
+    a,b,c,d = dataPrepare().Vectorizer('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
+    # print(type(a),type(b),type(c),type(d))
+    print(a)

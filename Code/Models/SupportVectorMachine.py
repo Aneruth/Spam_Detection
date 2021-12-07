@@ -33,7 +33,7 @@ class SupportVector:
         from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
         print(f'The confusion matrix for Support Vector Machine before hyper parameter tunning is \n{confusion_matrix(self.y_test,self.SVMprediction)}')
 
-        print(f'\n Classification report for Support Vector Machine before hyper parameter tunning is:\n{classification_report(self.y_test,self.SVMprediction)}')
+        print(f'\nClassification report for Support Vector Machine before hyper parameter tunning is:\n{classification_report(self.y_test,self.SVMprediction)}')
 
         acc_score_before_hyper = round(accuracy_score(self.y_test,self.SVMprediction)*100,2)
         print(f'Accuracy Score before hyper parameter tunning is: {acc_score_before_hyper}%')
@@ -93,3 +93,4 @@ class SupportVector:
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+        return ((grid.best_score_)*100).round(2)
