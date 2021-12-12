@@ -10,11 +10,16 @@ class dataPrepare:
     '''
 
     def Vectorizer(self,path):
-        '''
-        The term frequency–inverse document frequency, is a numerical statistic that is intended to reflect 
+        """The term frequency–inverse document frequency, is a numerical statistic that is intended to reflect 
         how important a word is to a document in a collection or corpus.
         We are using this method to convert our text data to a sparse matrix (dense).
-        '''
+
+        Args:
+            path (String): Path of our daatset
+
+        Returns:
+            DataFrame: returns the input for our algorithms(DataFrame/DataSeries)
+        """
         from sklearn.feature_extraction.text import TfidfVectorizer
         
         vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
@@ -39,6 +44,14 @@ class dataPrepare:
         return self.X_train, self.X_test, self.y_train, self.y_test
     
     def deepLearningInput(self,path):
+        """Input to for our deep learning algorithms
+
+        Args:
+            path (String): Path of our daatset
+
+        Returns:
+            DataFrame: returns the input for our algorithms(DataFrame/DataSeries)
+        """
         from sklearn.feature_extraction.text import TfidfVectorizer
         
         vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
@@ -47,9 +60,6 @@ class dataPrepare:
         self.data = self.data.preprocessMethod(path)
         
         self.feature = vec.fit_transform(self.data.CONTENT)
-
-        # Train test split our data
-        from sklearn.model_selection import train_test_split
 
         self.X = self.feature
         self.y = self.data.CLASS
