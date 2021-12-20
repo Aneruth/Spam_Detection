@@ -11,9 +11,14 @@ class Parser:
     '''
 
     def loadData(self,path):
-        '''
-        We pass the path of our dataset.
-        '''
+        """This function considers the path as an input (dataset).
+
+        Args:
+            path (String): Path of the dataset
+
+        Returns:
+            Dataframe: returns the dataset
+        """
         import pandas as pd
         self.dataset = pd.read_csv(path)
         # After analysing the dataset we can use two columns that is CONTENT and CLASS
@@ -27,11 +32,16 @@ class Preprocess:
     nltk.tokenize for tokenization.
     '''
     def preprocessMethod(self,path):
-        '''
-        Takes the output from the previos class where the dataset is generated.
-        '''
+        """Takes the output from the previous class where the dataset is generated.
+
+        Args:
+            path (String): Path of the dataset
+
+        Returns:
+            Dataframe: Return the dataset(target columns) where we clean and preprocess it.
+        """
         data = Parser()
-        self.dataset = data.loadData(path)[['CONTENT','CLASS']]
+        self.dataset = data.loadData(path)[['CONTENT','CLASS']] # choosign only the target columns we need to pass
 
         # Before applying stop words we need to tokenize the feature column
         # Applying stopwords for our column
