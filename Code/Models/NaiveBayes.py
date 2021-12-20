@@ -91,7 +91,7 @@ class Naive_Bayes:
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,((grid.best_score_)*100).round(2)])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NaiveBayes/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()

@@ -1,6 +1,7 @@
 import sys
 import tensorflow as tf
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+
 import torch
 import torch.nn as nn
 
@@ -92,32 +93,33 @@ class LSTM(nn.Module):
         out, (hn, cn) = self.lstm(x, (h0.detach(), c0.detach()))
 
         # Index hidden state of last time step
-        # out.size() --> 100, 32, 100
-        # out[:, -1, :] --> 100, 100 --> just want last time step hidden states! 
-        out = self.fc(out[:, -1, :]) 
-        # out.size() --> 100, 10
+        out = self.fc(out[:, -1, :])
         return out
     
 class LSTMImplement:
 
-    def __init__(self,path,input_dim, hidden_dim, num_layers, output_dim) -> None:
-        """[summary]
+    def __init__(self,path, hidden_dim, num_layers, output_dim) -> None:
+        """A cosntructor which takes the path of the dataset, number of hidden dimensions, number of layers and output
+        diemensions as our parameters. This will plot our accuracy plot and loss plot.
 
         Args:
             path (String): Path of our dataset
-            input_dim (int): Length of the dataset
             hidden_dim (int): Total hidden layer
             num_layers (int): Total layers to be present
             output_dim (int): Number of output diemension layer
         """
         self.path = path
-        self.input_dim = input_dim
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
         self.output_dim = output_dim
 
     def run(self):
-        model = LSTM(input_dim=self.input_dim, hidden_dim=self.hidden_dim, output_dim=self.output_dim, num_layers=self.num_layers)
+        fetchData = dataPrepare()
+        X_train, X_test, y_train, y_test =  fetchData.Vectorizer(self.path)
+        
+        x_train,x_test,y_train,y_test = Data(self.path).getData()
+        input_dimension = X_train.shape[1]
+        model = LSTM(input_dim=input_dimension, hidden_dim=self.hidden_dim, output_dim=self.output_dim, num_layers=self.num_layers)
 
         loss_fn = torch.nn.MSELoss()
 
@@ -126,8 +128,6 @@ class LSTMImplement:
         print(len(list(model.parameters())))
         for i in range(len(list(model.parameters()))):
             print(list(model.parameters())[i].size())
-        
-        x_train,x_test,y_train,y_test = Data(self.path).getData()
 
         num_epochs = 1000
         loss_val  = np.zeros(num_epochs)
@@ -159,7 +159,13 @@ class LSTMImplement:
         import matplotlib.pyplot as plt
         plt.plot(loss_val, label="Training loss")
         plt.legend()
-        plt.show()
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/LSTM/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.show(block=False)
+        plt.pause(3)
+        plt.close()
 
         plt.plot(acc_val, label="Accuracy")
         plt.legend()
@@ -167,4 +173,5 @@ class LSTMImplement:
 
 # Testing
 if __name__ == "__main__":
-    pass
+    lstm = LSTMImplement(path='/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv',hidden_dim=28,num_layers=4,output_dim=1)
+    lstm.run()
