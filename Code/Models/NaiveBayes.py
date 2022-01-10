@@ -1,6 +1,12 @@
-import sys
+from posixpath import abspath
+import sys,os
+from pathlib import Path
+# sys.path.append("../") 
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 from DataPreparation import dataPrepare
+
+import warnings
+warnings.filterwarnings("ignore")
 
 #Import Gaussian Naive Bayes model
 from sklearn.naive_bayes import GaussianNB
@@ -11,7 +17,13 @@ class Naive_Bayes:
         self.path = path
     
     def nb(self):
-        
+        """The Bayes' Theorem is used to preprocess for classification techniques known as 
+        Naive Bayes classifiers. It is a family of algorithms that share a similar idea, 
+        namely that each pair of features being classified is independent of the others.
+
+        Returns:
+            [list]: returns label test data and prediction values
+        """
         fetchData = dataPrepare()
         self.X_train, self.X_test, self.y_train, self.y_test = fetchData.Vectorizer(self.path)
 
@@ -29,6 +41,11 @@ class Naive_Bayes:
         return self.y_test,nb_prediction
     
     def metrics(self):
+        """A function which calculates all the metrices and plots the graph.
+
+        Returns:
+            [float]: Returns the predcited score value
+        """
         import matplotlib.pyplot as plt
 
         self.y_test,nb_prediction = self.nb()
@@ -55,8 +72,8 @@ class Naive_Bayes:
 
         '''
         Important parameter for grid search 
-        - verbose --> get the quality of the data more the verbose more the quality
-        - scoring --> a parameter where we define what we need to infer from the dataset
+            - verbose --> get the quality of the data more the verbose more the quality
+            - scoring --> a parameter where we define what we need to infer from the dataset
         '''
         from sklearn.model_selection import GridSearchCV
         # feed the search variable to the grid search 
@@ -78,7 +95,8 @@ class Naive_Bayes:
 
         # To print the classification report
         print('\nThe classification report after grid search is:' + f'\n{classification_report(self.y_test,grid_predict)}')
-
+        immedDir = Path(__file__).parent.parent
+        parentDir = os.path.dirname(abspath(immedDir))
         # to get the best score from the grid
         print('The best score is:',((grid.best_score_)*100).round(2),'%')
         print()
@@ -91,8 +109,18 @@ class Naive_Bayes:
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,((grid.best_score_)*100).round(2)])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NaiveBayes/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NaiveBayes'
+        if os.path.exists(path_to_save) != True:
+            os.mkdir(path_to_save)
+        plt.savefig(f'{path_to_save}/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
         return ((grid.best_score_)*100).round(2)
+
+if __name__ == '__main__':
+    nb = Naive_Bayes('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
+    nb.metrics()
+    # immedDir = Path(__file__).parent.parent
+    # parentDir = os.path.dirname(abspath(immedDir))
+    # print(f'{os.path.join(parentDir,immedDir)}/Aneruth')

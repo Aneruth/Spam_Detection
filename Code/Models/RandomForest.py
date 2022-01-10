@@ -1,5 +1,6 @@
 import sys
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+# sys.path.append("../") 
 from DataPreparation import dataPrepare
 
 # Package for Random Forest
