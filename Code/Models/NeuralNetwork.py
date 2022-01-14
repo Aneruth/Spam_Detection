@@ -1,6 +1,10 @@
-import sys
-# sys.path.append("../") 
+from posixpath import abspath
+import sys,os
+from pathlib import Path
+
+from keras.backend import dropout
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+# sys.path.append("../") 
 from DataPreparation import dataPrepare
 
 # Package for our CNN model
@@ -18,7 +22,7 @@ class NeuralNet:
         X_train, X_test, y_train, y_test = fetchData.Vectorizer(self.path)
         return X_train, X_test, y_train, y_test
         
-    def nnConfiguration(self,input_dimension,y_train,validation_dataset):
+    def nnConfiguration(self):
         """A Neural Network Model build where we configure the NN.
 
         Returns:
@@ -57,7 +61,16 @@ class NeuralNet:
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        # plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        immedDir = Path(__file__).parent.parent
+        parentDir = os.path.dirname(abspath(immedDir))
+
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NeuralNetwork'
+
+        # Check if the output folder path present if not create it
+        if os.path.exists(path_to_save) != True:
+            os.mkdir(path_to_save)
+
+        plt.savefig(f'{path_to_save}/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -69,10 +82,11 @@ class NeuralNet:
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        # plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+        return acc
 
 class NeuralNetPca():
     def __init__(self, path) -> None:
@@ -94,7 +108,7 @@ class NeuralNetPca():
         model.add(Dense(12, input_dim=100, activation='relu'))
         model.add(GaussianNoise(pca_std))
         model.add(Dense(8, activation='relu'))
-        # model.add(Dropout(0.1))
+        # model.add(dropout(0.1))
         model.add(Dense(1, activation='sigmoid'))
 
         # https://stackoverflow.com/questions/61742556/valueerror-shapes-none-1-and-none-2-are-incompatible
@@ -110,10 +124,16 @@ class NeuralNetPca():
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NaiveBayes'
+        immedDir = Path(__file__).parent.parent
+        parentDir = os.path.dirname(abspath(immedDir))
+
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NeuralNetwork/NeuraNetworkPCA'
+
+        # Check if the output folder path present if not create it
         if os.path.exists(path_to_save) != True:
             os.mkdir(path_to_save)
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/NeuraNetworkPCA/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        
+        plt.savefig(f'{path_to_save}/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -124,7 +144,7 @@ class NeuralNetPca():
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/NeuraNetworkPCA/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -135,5 +155,7 @@ class NeuralNetPca():
     # nerural = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
     # nerural.nnPCA()
     for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-        neural = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-        neural.nnPCA()'''
+        neural = NeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
+        neural.metrices()
+        neural_PCA = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
+        neural_PCA.nnPCA()'''

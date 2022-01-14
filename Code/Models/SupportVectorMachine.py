@@ -109,8 +109,11 @@ class SupportVector:
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
         
         path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/SVM'
+        
+        # Check if the output folder path present if not create it
         if os.path.exists(path_to_save) != True:
             os.mkdir(path_to_save)
+        
         plt.savefig(f'{path_to_save}/svmAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
