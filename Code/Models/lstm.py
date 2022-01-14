@@ -1,13 +1,14 @@
 import sys
 import tensorflow as tf
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+sys.path.append("../")
+# sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 
 import torch
 import torch.nn as nn
 
 import tensorflow as tf # Adding padding to our dataset (train and test models)
 import numpy as np
-from Code.Preprocess.DataPreparation import dataPrepare
+from Preprocess.DataPreparation import dataPrepare
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -170,6 +171,74 @@ class LSTMImplement:
         plt.plot(acc_val, label="Accuracy")
         plt.legend()
         plt.show()
+
+class LSTMPca():
+    def __init__(self, path, hidden_dim, num_layers, output_dim) -> None:
+        self.path = path
+        self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
+        self.output_dim = output_dim
+
+    def lstmPCA(self):
+            from PCA import PrincipleComponentAnalysis
+
+            pcaInput = PrincipleComponentAnalysis(self.path)
+            lstmPca = LSTMImplement(self.path)
+            X_train, X_test, y_train, y_test = lstmPca.neuralNetModelInput()
+            pca_std,X_pca_test, X_pca_train,y_test,y_train = pcaInput.produceData(X_train, X_test, y_train, y_test)
+
+            input_dimension = X_train.shape[1]
+            model = LSTM(input_dim=input_dimension, hidden_dim=self.hidden_dim, output_dim=self.output_dim, num_layers=self.num_layers)
+
+            loss_fn = torch.nn.MSELoss()
+
+            optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
+            print(model)
+            print(len(list(model.parameters())))
+            for i in range(len(list(model.parameters()))):
+                print(list(model.parameters())[i].size())
+
+            num_epochs = 1000
+            loss_val  = np.zeros(num_epochs)
+            acc_val  = np.zeros(num_epochs)
+
+            for t in range(num_epochs):
+                # Forward pass
+                y_train_pred = model(X_pca_train)
+
+                loss = loss_fn(y_train_pred, y_train)
+                if t % 10 == 0 and t !=0:
+                    print(f"Epoch {t} MSE is {loss.item()}")
+                loss_val[t] = loss.item()
+                
+                pred = torch.max(y_train_pred, 1)[1].eq(y_train).sum()
+                # pred = model_accuracy(y_train_pred,y)
+                if t % 10 == 0 and t !=0:
+                    print(f"Epoch {t} accuracy(%) is {(100*pred/len(y_train)).item()}")
+                acc_val[t] = (100*pred/len(y_train)).item()
+                # Zero out gradient, else they will accumulate between epochs
+                optimiser.zero_grad()
+
+                # Backward pass
+                loss.backward()
+
+                # Update parameters
+                optimiser.step()
+            
+            import matplotlib.pyplot as plt
+            plt.plot(loss_val, label="Training loss")
+            plt.legend()
+            plt.title('model loss')
+            plt.ylabel('loss')
+            plt.xlabel('epoch')
+            plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/LSTM/LossPlotforLSTMPCA{self.path.split("/")[-1].split(".")[0]}.png')
+            plt.show(block=False)
+            plt.pause(3)
+            plt.close()
+
+            plt.plot(acc_val, label="Accuracy")
+            plt.legend()
+            plt.show()
 
 # Testing
 if __name__ == "__main__":

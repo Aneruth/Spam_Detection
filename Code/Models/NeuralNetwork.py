@@ -1,4 +1,5 @@
 import sys
+# sys.path.append("../") 
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 from DataPreparation import dataPrepare
 
@@ -56,7 +57,7 @@ class NeuralNet:
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        # plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -68,7 +69,7 @@ class NeuralNet:
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        # plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -109,6 +110,9 @@ class NeuralNetPca():
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NaiveBayes'
+        if os.path.exists(path_to_save) != True:
+            os.mkdir(path_to_save)
         plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/NeuralNetwork/NeuraNetworkPCA/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)

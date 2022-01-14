@@ -1,16 +1,28 @@
-import sys
+from posixpath import abspath
+import sys,os
+from pathlib import Path
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+# sys.path.append("../") 
 from DataPreparation import dataPrepare
 # Importing the package for SVM algorithm
 from sklearn.svm import SVC
 
 class SupportVector:
+    """Support vector machine is highly preferred by many as it produces significant accuracy 
+    with less computation power. Support Vector Machine, abbreviated as SVM can be used for 
+    both regression and classification tasks. But, it is widely used in classification objectives.
+    """
     
     def __init__(self,path) -> None:
         self.path = path
 
     def svm(self):
-        
+        """The objective of the support vector machine algorithm is to find a hyperplane in an 
+        N-dimensional space(N — the number of features) that distinctly classifies the data points
+
+        Returns:
+            list: returns label test data and prediction values
+        """
         fetchData = dataPrepare()
         self.X_train, self.X_test, self.y_train, self.y_test = fetchData.Vectorizer(self.path)
         
@@ -26,6 +38,18 @@ class SupportVector:
         return self.y_test,self.SVMprediction
     
     def metrics(self):
+        """A function which calculates all the metrices and plots the graph.
+        
+        Hpyperparameter tuning the model with the help of grid search
+
+        Performing grid search which is a type of cross validation for Support Vector Machine
+        - C is a hypermeter which is set before the training model and used to control error.
+        - Gamma is also a hypermeter which is set before the training model and used to give curvature weight of the decision boundary.
+        - More gamma more the curvature and less gamma less curvature.
+
+        Returns:
+            float: Returns the predcited score value
+        """
         import matplotlib.pyplot as plt
 
         self.y_test,self.SVMprediction = self.svm()
@@ -38,14 +62,6 @@ class SupportVector:
         acc_score_before_hyper = round(accuracy_score(self.y_test,self.SVMprediction)*100,2)
         print(f'Accuracy Score before hyper parameter tunning is: {acc_score_before_hyper}%')
 
-        '''
-        Hpyperparameter tuning the model with the help of grid search
-
-        Performing grid search which is a type of cross validation for Support Vector Machine
-        - C is a hypermeter which is set before the training model and used to control error.
-        - Gamma is also a hypermeter which is set before the training model and used to give curvature weight of the decision boundary.
-        - More gamma more the curvature and less gamma less curvature.
-        '''
         # Initialise the gird search variable 
         pg = {"C":[0.1,1,10,100,1000],"gamma":[1,.1,.01,.001,.0001]}
 
@@ -82,6 +98,8 @@ class SupportVector:
         print()
         s = [acc_score_before_hyper,((grid.best_score_)*100).round(2)]
         n = ['Before Hyperparameter','After Hyperparameter']
+        immedDir = Path(__file__).parent.parent
+        parentDir = os.path.dirname(abspath(immedDir))
         plt.figure(figsize=(12,6))
         plt.title('Graph to compare accuracy score before and after hyperparameter tunning')
         plt.xlabel('SVM Algorithm')
@@ -89,7 +107,11 @@ class SupportVector:
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,((grid.best_score_)*100).round(2)])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/SVM/svmAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/SVM'
+        if os.path.exists(path_to_save) != True:
+            os.mkdir(path_to_save)
+        plt.savefig(f'{path_to_save}/svmAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()

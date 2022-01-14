@@ -1,6 +1,9 @@
 import sys
 sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
 
+import warnings
+warnings.filterwarnings("ignore")
+
 from preprocess import Preprocess
 
 class dataPrepare:
