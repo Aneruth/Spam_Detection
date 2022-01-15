@@ -1,8 +1,7 @@
 from posixpath import abspath
 import sys,os
 from pathlib import Path
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
-# sys.path.append("../") 
+sys.path.insert(0,os.path.join('Code/Preprocess'))
 from DataPreparation import dataPrepare
 
 # Package for Random Forest

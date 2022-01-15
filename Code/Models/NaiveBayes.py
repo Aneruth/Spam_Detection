@@ -1,8 +1,7 @@
 from posixpath import abspath
 import sys,os
 from pathlib import Path
-# sys.path.append("../") 
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+sys.path.insert(0,os.path.join('Code/Preprocess'))
 from DataPreparation import dataPrepare
 
 import warnings
@@ -11,7 +10,7 @@ warnings.filterwarnings("ignore")
 #Import Gaussian Naive Bayes model
 from sklearn.naive_bayes import GaussianNB
 
-class Naive_Bayes:
+class NaiveBayes:
 
     def __init__(self,path) -> None:
         self.path = path
@@ -40,7 +39,7 @@ class Naive_Bayes:
         # print(f"Accuracy score for Naive bayes is: {nb_accuracy_score}%")
         return self.y_test,nb_prediction
     
-    def metrics(self):
+    def naiveBayes(self):
         """A function which calculates all the metrices and plots the graph.
 
         Returns:
@@ -118,9 +117,9 @@ class Naive_Bayes:
         plt.close()
         return ((grid.best_score_)*100).round(2)
 
-if __name__ == '__main__':
-    nb = Naive_Bayes('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
+'''if __name__ == '__main__':
+    nb = NaiveBayes('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
     nb.metrics()
     # immedDir = Path(__file__).parent.parent
     # parentDir = os.path.dirname(abspath(immedDir))
-    # print(f'{os.path.join(parentDir,immedDir)}/Aneruth')
+    # print(f'{os.path.join(parentDir,immedDir)}/Aneruth')'''

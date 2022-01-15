@@ -1,10 +1,7 @@
 from posixpath import abspath
 import sys,os
 from pathlib import Path
-
-from keras.backend import dropout
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
-# sys.path.append("../") 
+sys.path.insert(0,os.path.join('Code/Preprocess'))
 from DataPreparation import dataPrepare
 
 # Package for our CNN model
@@ -99,7 +96,7 @@ class NeuralNetPca():
         nnPca = NeuralNet(self.path)
         X_train, X_test, y_train, y_test = nnPca.neuralNetModelInput()
         pca_std,X_pca_test, X_pca_train,y_test,y_train = pcaInput.produceData(X_train, X_test, y_train, y_test)
-
+        
         from keras.layers import GaussianNoise
         model = Sequential()
         # layers = 1
@@ -150,7 +147,7 @@ class NeuralNetPca():
         plt.close()
 
     
-'''if __name__ == '__main__':
+if __name__ == '__main__':
     import os
     # nerural = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
     # nerural.nnPCA()
@@ -158,4 +155,4 @@ class NeuralNetPca():
         neural = NeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
         neural.metrices()
         neural_PCA = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-        neural_PCA.nnPCA()'''
+        neural_PCA.nnPCA()
