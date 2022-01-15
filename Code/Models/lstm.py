@@ -84,11 +84,12 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
+        x = torch.from_numpy(x).type(torch.Tensor)
         # Initialize hidden state with zeros
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).requires_grad_()
+        h0 = torch.zeros(self.num_layers,tuple(x.size())[0] , self.hidden_dim).requires_grad_()
 
         # Initialize cell state
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).requires_grad_()
+        c0 = torch.zeros(self.num_layers, tuple(x.size())[0], self.hidden_dim).requires_grad_()
 
         # We need to detach as we are doing truncated backpropagation through time (BPTT)
         # If we don't, we'll backprop all the way to the start even after going through another batch
@@ -191,7 +192,6 @@ class LSTMPca:
             pcaInput = PrincipleComponentAnalysis(self.path)
             lstmPca = LSTMImplement(self.path,self.hidden_dim,self.num_layers,self.output_dim)
             X_train, X_test, y_train, y_test = Data(self.path).getData()
-            print("Praveen ANeruth ",torch.is_tensor(X_train))
             pca_std,X_pca_test, X_pca_train,y_test,y_train = pcaInput.produceData(X_train, X_test, y_train, y_test)
 
             input_dimension = X_train.shape[1]

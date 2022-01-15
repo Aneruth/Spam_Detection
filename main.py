@@ -1,25 +1,15 @@
 import sys,os
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Models')
+sys.path.insert(0,os.path.join('Code/Models'))
 
 import SupportVectorMachine,NaiveBayes,RandomForest,NeuralNetwork
 
-'''# SVM for all dataset
-for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-    ml = SupportVectorMachine.SupportVector('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-    ml.metrics()'''
+data = 'YoutubeComplete.csv'
 
+svm = SupportVectorMachine.SupportVector(data)
+svm.supportVectorMachine()
 
-# Naive bayes Algorithm for all dataset
-for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-    ml = NaiveBayes.Naive_Bayes('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-    ml.metrics()
+rf = RandomForest.randomForest(data).metrics()
 
-'''# Random forest Algorithm for all dataset
-for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-    ml = RandomForest.randomForest('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-    ml.metrics()
+nb = NaiveBayes.NaiveBayes(data).naiveBayes()
 
-# Neural Netowork for all dataset
-for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-    nerural = NeuralNetwork.NeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-    nerural.cnn()'''
+nerural = NeuralNetwork.NeuralNet(data).metrices()

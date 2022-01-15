@@ -43,7 +43,7 @@ class NaiveBayes:
         """A function which calculates all the metrices and plots the graph.
 
         Returns:
-            [float]: Returns the predcited score value
+            float: Returns the predcited score value
         """
         import matplotlib.pyplot as plt
 
@@ -94,8 +94,10 @@ class NaiveBayes:
 
         # To print the classification report
         print('\nThe classification report after grid search is:' + f'\n{classification_report(self.y_test,grid_predict)}')
+       
         immedDir = Path(__file__).parent.parent
-        parentDir = os.path.dirname(abspath(immedDir))
+        # parentDir = os.path.dirname(abspath(immedDir))
+       
         # to get the best score from the grid
         print('The best score is:',((grid.best_score_)*100).round(2),'%')
         print()
@@ -108,18 +110,19 @@ class NaiveBayes:
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,((grid.best_score_)*100).round(2)])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NaiveBayes'
-        if os.path.exists(path_to_save) != True:
-            os.mkdir(path_to_save)
-        plt.savefig(f'{path_to_save}/NaiveBayesAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        
+        path_to_save = os.path.join(immedDir, "Images/NaiveBayes")
+        
+        # Check if the output folder path present if not create it
+        if not os.path.exists(path_to_save):
+            if os.path.join(immedDir, "Images"):
+                os.mkdir(os.path.join(immedDir, "Images/NaiveBayes"))
+            os.mkdir(os.path.join(immedDir, "Images"))
+            os.mkdir(os.path.join(immedDir, "Images/NaiveBayes"))
+        
+        plt.savefig( os.path.join( path_to_save, "NaiveBayesAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
+        
         plt.show(block=False)
         plt.pause(3)
         plt.close()
         return ((grid.best_score_)*100).round(2)
-
-'''if __name__ == '__main__':
-    nb = NaiveBayes('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
-    nb.metrics()
-    # immedDir = Path(__file__).parent.parent
-    # parentDir = os.path.dirname(abspath(immedDir))
-    # print(f'{os.path.join(parentDir,immedDir)}/Aneruth')'''
