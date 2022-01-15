@@ -1,8 +1,7 @@
 from posixpath import abspath
 import sys,os
 from pathlib import Path
-sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
-# sys.path.append("../") 
+sys.path.insert(0,os.path.join('Code/Preprocess'))
 from DataPreparation import dataPrepare
 # Importing the package for SVM algorithm
 from sklearn.svm import SVC
@@ -37,7 +36,7 @@ class SupportVector:
 
         return self.y_test,self.SVMprediction
     
-    def metrics(self):
+    def supportVectorMachine(self):
         """A function which calculates all the metrices and plots the graph.
         
         Hpyperparameter tuning the model with the help of grid search
@@ -98,8 +97,10 @@ class SupportVector:
         print()
         s = [acc_score_before_hyper,((grid.best_score_)*100).round(2)]
         n = ['Before Hyperparameter','After Hyperparameter']
+        
         immedDir = Path(__file__).parent.parent
         parentDir = os.path.dirname(abspath(immedDir))
+        
         plt.figure(figsize=(12,6))
         plt.title('Graph to compare accuracy score before and after hyperparameter tunning')
         plt.xlabel('SVM Algorithm')

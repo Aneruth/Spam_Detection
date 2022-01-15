@@ -1,14 +1,13 @@
-import sys
+import sys,os
 import tensorflow as tf
-sys.path.append("../")
-# sys.path.insert(0, '/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Preprocess')
+sys.path.insert(0,os.path.join('Code/Preprocess'))
 
 import torch
 import torch.nn as nn
 
 import tensorflow as tf # Adding padding to our dataset (train and test models)
 import numpy as np
-from Preprocess.DataPreparation import dataPrepare
+from DataPreparation import dataPrepare
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -123,7 +122,7 @@ class LSTMImplement:
         model = LSTM(input_dim=input_dimension, hidden_dim=self.hidden_dim, output_dim=self.output_dim, num_layers=self.num_layers)
 
         loss_fn = torch.nn.MSELoss()
-
+        # print(f"Type of X_train {type(X_train)}")
         optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
         print(model)
         print(len(list(model.parameters())))
@@ -172,7 +171,7 @@ class LSTMImplement:
         plt.legend()
         plt.show()
 
-class LSTMPca():
+class LSTMPca:
     def __init__(self, path, hidden_dim, num_layers, output_dim) -> None:
         self.path = path
         self.hidden_dim = hidden_dim
@@ -183,8 +182,9 @@ class LSTMPca():
             from PCA import PrincipleComponentAnalysis
 
             pcaInput = PrincipleComponentAnalysis(self.path)
-            lstmPca = LSTMImplement(self.path)
-            X_train, X_test, y_train, y_test = lstmPca.neuralNetModelInput()
+            lstmPca = LSTMImplement(self.path,self.hidden_dim,self.num_layers,self.output_dim)
+            X_train, X_test, y_train, y_test = Data(self.path).getData()
+            print("Praveen ANeruth ",torch.is_tensor(X_train))
             pca_std,X_pca_test, X_pca_train,y_test,y_train = pcaInput.produceData(X_train, X_test, y_train, y_test)
 
             input_dimension = X_train.shape[1]
@@ -242,5 +242,5 @@ class LSTMPca():
 
 # Testing
 if __name__ == "__main__":
-    lstm = LSTMImplement(path='/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv',hidden_dim=28,num_layers=4,output_dim=1)
-    lstm.run()
+    lstm = LSTMPca(path='/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv',hidden_dim=28,num_layers=4,output_dim=1)
+    lstm.lstmPCA()
