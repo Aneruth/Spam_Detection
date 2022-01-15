@@ -59,15 +59,16 @@ class NeuralNet:
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
         immedDir = Path(__file__).parent.parent
-        parentDir = os.path.dirname(abspath(immedDir))
+        # parentDir = os.path.dirname(abspath(immedDir))
 
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NeuralNetwork'
+        path_to_save = os.path.join(immedDir,'Images/NeuralNetwork')
 
         # Check if the output folder path present if not create it
-        if os.path.exists(path_to_save) != True:
-            os.mkdir(path_to_save)
+        if not os.path.exists(path_to_save):
+            os.mkdir(os.path.join(immedDir, "Images"))
+            os.mkdir(os.path.join(immedDir, "Images/NeuralNetwork"))
 
-        plt.savefig(f'{path_to_save}/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig( os.path.join( path_to_save, "NeuralNetworkAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -79,7 +80,7 @@ class NeuralNet:
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig( os.path.join( path_to_save, "NeuralNetworkLossPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -145,14 +146,3 @@ class NeuralNetPca():
         plt.show(block=False)
         plt.pause(3)
         plt.close()
-
-    
-if __name__ == '__main__':
-    import os
-    # nerural = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv')
-    # nerural.nnPCA()
-    for data in sorted(os.listdir('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/')):
-        neural = NeuralNet('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-        neural.metrices()
-        neural_PCA = NeuralNetPca('/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/'+data)
-        neural_PCA.nnPCA()

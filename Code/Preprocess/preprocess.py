@@ -20,7 +20,10 @@ class Parser:
             Dataframe: returns the dataset
         """
         import pandas as pd
-        self.dataset = pd.read_csv(path)
+        self.dataset = pd.read_csv(path,on_bad_lines='skip',delimiter='\t')
+        if self.dataset.isnull().values.any():
+            self.dataset.dropna(inplace=True)
+            print(self.dataset.shape)
         # After analysing the dataset we can use two columns that is CONTENT and CLASS
         return self.dataset
 

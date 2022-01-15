@@ -64,22 +64,26 @@ class randomForest:
         print()
         s = [acc_score_before_hyper,acc_score_after_hyper]
         n = ['Before Hyperparameter','After Hyperparameter']
+        
         immedDir = Path(__file__).parent.parent
-        parentDir = os.path.dirname(abspath(immedDir))
+        # parentDir = os.path.dirname(abspath(immedDir))
+        
         plt.figure(figsize=(12,6))
         plt.title('Graph to compare accuracy score before and after hyperparameter tunning')
         plt.xlabel('Random Forest Algorithm')
         plt.ylabel('Accuracy Score')
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/RandomForest'
-        plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,acc_score_after_hyper])
+
+        path_to_save = os.path.join(immedDir,'Images/RandomForest')
         
         # Check if the output folder path present if not create it
-        if os.path.exists(path_to_save) != True:
-            os.mkdir(path_to_save)
-        
+        if not os.path.exists(path_to_save):
+            os.mkdir(os.path.join(immedDir, "Images"))
+            os.mkdir(os.path.join(immedDir, "Images/RandomForest"))
+
+        plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,acc_score_after_hyper])
         for i in range(len(s)):
             plt.annotate(str(s[i]), xy=(n[i],s[i]), ha='center', va='bottom')
-        plt.savefig(f'{path_to_save}/RandomForestAccPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig( os.path.join( path_to_save, "RandomForestAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()
