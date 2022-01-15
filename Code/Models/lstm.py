@@ -1,4 +1,6 @@
+from posixpath import abspath
 import sys,os
+from pathlib import Path
 import tensorflow as tf
 sys.path.insert(0,os.path.join('Code/Preprocess'))
 
@@ -156,13 +158,18 @@ class LSTMImplement:
             # Update parameters
             optimiser.step()
         
+        immedDir = Path(__file__).parent.parent
+        parentDir = os.path.dirname(abspath(immedDir))
+        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/LSTM'
+        if os.path.exists(path_to_save) != True:
+            os.mkdir(path_to_save)
         import matplotlib.pyplot as plt
         plt.plot(loss_val, label="Training loss")
         plt.legend()
         plt.title('model loss')
         plt.ylabel('loss')
         plt.xlabel('epoch')
-        plt.savefig(f'/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Images/LSTM/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()
