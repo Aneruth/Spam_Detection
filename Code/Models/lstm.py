@@ -84,7 +84,8 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
-        x = torch.from_numpy(x).type(torch.Tensor)
+        # https://discuss.pytorch.org/t/why-do-i-get-typeerror-expected-np-ndarray-got-numpy-ndarray-when-i-use-torch-from-numpy-function/37525/3
+        x = torch.from_numpy(np.asarray(x)).type(torch.Tensor)
         # Initialize hidden state with zeros
         h0 = torch.zeros(self.num_layers,tuple(x.size())[0] , self.hidden_dim).requires_grad_()
 
@@ -160,17 +161,24 @@ class LSTMImplement:
             optimiser.step()
         
         immedDir = Path(__file__).parent.parent
-        parentDir = os.path.dirname(abspath(immedDir))
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/LSTM'
-        if os.path.exists(path_to_save) != True:
-            os.mkdir(path_to_save)
+        # parentDir = os.path.dirname(abspath(immedDir))
+
+        path_to_save = os.path.join(immedDir,'Images/LSTM')
+
+        # Check if the output folder path present if not create it
+        if not os.path.exists(os.path.join(immedDir, "Images")):
+            os.mkdir(os.path.join(immedDir, "Images"))
+        
+        if not os.path.exists(os.path.join(immedDir, "Images/LSTM")):
+            os.mkdir(os.path.join(immedDir, "Images/LSTM"))
+        
         import matplotlib.pyplot as plt
         plt.plot(loss_val, label="Training loss")
         plt.legend()
         plt.title('model loss')
         plt.ylabel('loss')
         plt.xlabel('epoch')
-        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig( os.path.join( path_to_save, "LossPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -246,8 +254,3 @@ class LSTMPca:
             plt.plot(acc_val, label="Accuracy")
             plt.legend()
             plt.show()
-
-# Testing
-if __name__ == "__main__":
-    lstm = LSTMPca(path='/Users/aneruthmohanasundaram/Documents/GitHub/Spam_Detection/Code/Data/Youtube01-Psy.csv',hidden_dim=28,num_layers=4,output_dim=1)
-    lstm.lstmPCA()

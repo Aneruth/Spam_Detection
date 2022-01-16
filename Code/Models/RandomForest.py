@@ -76,8 +76,10 @@ class randomForest:
         path_to_save = os.path.join(immedDir,'Images/RandomForest')
         
         # Check if the output folder path present if not create it
-        if not os.path.exists(path_to_save):
+        if not os.path.exists(os.path.join(immedDir, "Images")):
             os.mkdir(os.path.join(immedDir, "Images"))
+        
+        if not os.path.exists(os.path.join(immedDir, "Images/RandomForest")):
             os.mkdir(os.path.join(immedDir, "Images/RandomForest"))
 
         plt.bar(['Before Hyperparameter','After Hyperparameter'],[acc_score_before_hyper,acc_score_after_hyper])

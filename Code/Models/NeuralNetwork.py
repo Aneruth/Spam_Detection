@@ -7,8 +7,7 @@ from DataPreparation import dataPrepare
 # Package for our CNN model
 from keras.models import Sequential
 from keras.layers import Dense
-import warnings
-warnings.filterwarnings("ignore")
+
 class NeuralNet:
 
     def __init__(self,path) -> None:
@@ -64,8 +63,10 @@ class NeuralNet:
         path_to_save = os.path.join(immedDir,'Images/NeuralNetwork')
 
         # Check if the output folder path present if not create it
-        if not os.path.exists(path_to_save):
+        if not os.path.exists(os.path.join(immedDir, "Images")):
             os.mkdir(os.path.join(immedDir, "Images"))
+        
+        if not os.path.exists(os.path.join(immedDir, "Images/NeuralNetwork")):
             os.mkdir(os.path.join(immedDir, "Images/NeuralNetwork"))
 
         plt.savefig( os.path.join( path_to_save, "NeuralNetworkAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
@@ -100,13 +101,10 @@ class NeuralNetPca():
         
         from keras.layers import GaussianNoise
         model = Sequential()
-        # layers = 1
-        # units = 128
 
         model.add(Dense(12, input_dim=100, activation='relu'))
         model.add(GaussianNoise(pca_std))
         model.add(Dense(8, activation='relu'))
-        # model.add(dropout(0.1))
         model.add(Dense(1, activation='sigmoid'))
 
         # https://stackoverflow.com/questions/61742556/valueerror-shapes-none-1-and-none-2-are-incompatible
@@ -122,16 +120,20 @@ class NeuralNetPca():
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
+        
         immedDir = Path(__file__).parent.parent
-        parentDir = os.path.dirname(abspath(immedDir))
+        # parentDir = os.path.dirname(abspath(immedDir))
 
-        path_to_save = f'{os.path.join(parentDir,immedDir)}/Images/NeuralNetwork/NeuraNetworkPCA'
+        path_to_save = os.path.join(immedDir,'Images/NeuralNetwork/PCA')
 
         # Check if the output folder path present if not create it
-        if os.path.exists(path_to_save) != True:
-            os.mkdir(path_to_save)
+        if not os.path.exists(os.path.join(immedDir, "Images")):
+            os.mkdir(os.path.join(immedDir, "Images"))
         
-        plt.savefig(f'{path_to_save}/AccuracyPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        if not os.path.exists(os.path.join(immedDir, "Images/NeuralNetwork/PCA")):
+            os.mkdir(os.path.join(immedDir, "Images/NeuralNetwork/PCA"))
+        
+        plt.savefig( os.path.join( path_to_save, "PCA_AccuracyPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()
@@ -142,7 +144,7 @@ class NeuralNetPca():
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig(f'{path_to_save}/LossPlotfor{self.path.split("/")[-1].split(".")[0]}.png')
+        plt.savefig( os.path.join( path_to_save, "PCA_LossPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
         plt.show(block=False)
         plt.pause(3)
         plt.close()

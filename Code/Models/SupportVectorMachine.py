@@ -112,8 +112,10 @@ class SupportVector:
         path_to_save = os.path.join(immedDir,'Images/SVM')
         
         # Check if the output folder path present if not create it
-        if not os.path.exists(path_to_save):
+        if not os.path.exists(os.path.join(immedDir, "Images")):
             os.mkdir(os.path.join(immedDir, "Images"))
+        
+        if not os.path.exists(os.path.join(immedDir, "Images/SVM")):
             os.mkdir(os.path.join(immedDir, "Images/SVM"))
         
         plt.savefig( os.path.join( path_to_save, "svmAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))

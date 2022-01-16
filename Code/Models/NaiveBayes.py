@@ -114,10 +114,10 @@ class NaiveBayes:
         path_to_save = os.path.join(immedDir, "Images/NaiveBayes")
         
         # Check if the output folder path present if not create it
-        if not os.path.exists(path_to_save):
-            if os.path.join(immedDir, "Images"):
-                os.mkdir(os.path.join(immedDir, "Images/NaiveBayes"))
+        if not os.path.exists(os.path.join(immedDir, "Images")):
             os.mkdir(os.path.join(immedDir, "Images"))
+        
+        if not os.path.exists(os.path.join(immedDir, "Images/NaiveBayes")):
             os.mkdir(os.path.join(immedDir, "Images/NaiveBayes"))
         
         plt.savefig( os.path.join( path_to_save, "NaiveBayesAccPlotfor"+self.path.split("/")[-1].split(".")[0]+".png" ))
