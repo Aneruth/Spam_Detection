@@ -5,8 +5,9 @@ sys.path.insert(0,os.path.join('Code/Preprocess'))
 from DataPreparation import dataPrepare
 
 # Package for our CNN model
+from tensorflow import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense,Dropout
 
 class NeuralNet:
 
@@ -29,10 +30,11 @@ class NeuralNet:
         validation_dataset = (X_test.todense(),y_test)
         input_dimension = X_train.shape[1]
         neural = Sequential()
-        neural.add(Dense(12, input_dim = input_dimension, activation='relu')) # our input feature count is 1010 then we need to reduce the diemensions
+        neural.add(Dense(24, input_dim = input_dimension, activation='relu')) # our input feature count is 1010 then we need to reduce the diemensions
+        neural.add(Dropout(0.2, input_shape=(input_dimension,)))
+        neural.add(Dense(12,activation='relu'))
         neural.add(Dense(8, activation='relu'))
         neural.add(Dense(1, activation='sigmoid'))
-
         neural.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         print(neural.summary())
         # Keras fit for our dataset
@@ -148,3 +150,7 @@ class NeuralNetPca():
         plt.show(block=False)
         plt.pause(3)
         plt.close()
+
+
+if __name__ == '__main__':
+    NeuralNet('YoutubeComplete.csv').metrices()
