@@ -4,26 +4,20 @@ call the function or implement the method so we are creating a class where .....
 '''
 import warnings
 warnings.filterwarnings("ignore")
-
+path = 'YouTubeComplete.csv'
 class Parser:    
     '''
     A class to load the dataset. This class requires pandas package
     '''
 
-    def loadData(self,path):
+    def loadData(self):
         """This function considers the path as an input (dataset).
-
-        Args:
-            path (String): Path of the dataset
 
         Returns:
             Dataframe: returns the dataset
         """
         import pandas as pd
-        self.dataset = pd.read_csv(path,on_bad_lines='skip',delimiter='\t')
-        if self.dataset.isnull().values.any():
-            self.dataset.dropna(inplace=True)
-        # After analysing the dataset we can use two columns that is CONTENT and CLASS
+        self.dataset = pd.read_csv(path,delimiter=',')
         return self.dataset
 
 class Preprocess:
@@ -33,7 +27,7 @@ class Preprocess:
     This function requires nlp packages sunch as nltk.corpus, stemmer package (PorterStemmer), Regex, String and 
     nltk.tokenize for tokenization.
     '''
-    def preprocessMethod(self,path):
+    def preprocessMethod(self):
         """Takes the output from the previous class where the dataset is generated.
 
         Args:
@@ -43,7 +37,7 @@ class Preprocess:
             Dataframe: Return the dataset(target columns) where we clean and preprocess it.
         """
         data = Parser()
-        self.dataset = data.loadData(path)[['CONTENT','CLASS']] # choosign only the target columns we need to pass
+        self.dataset = data.loadData()[['CONTENT','CLASS']] # choosign only the target columns we need to pass
 
         # Before applying stop words we need to tokenize the feature column
         # Applying stopwords for our column

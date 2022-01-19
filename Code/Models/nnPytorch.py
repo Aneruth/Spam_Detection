@@ -28,8 +28,19 @@ class Model(nn.Module):
         return out
 
 class NeuralNet:
+    """Code inspired from https://www.kaggle.com/shivammehta007/spam-not-spam-classifier-with-pytorch and did some modifications.
 
+    """
     def __init__(self,path,input_dim,hidden_layer,output_dim,epochs) -> None:
+        """A constructor where we define the path to our dataset,hidden layer, output dimensions and epochs.
+
+        Args:
+            path (String): [description]
+            input_dim ([type]): [description]
+            hidden_layer ([type]): [description]
+            output_dim ([type]): [description]
+            epochs ([type]): [description]
+        """
         self.path = path
         self.input_dim = input_dim
         self.hidden_layer = hidden_layer
@@ -37,9 +48,10 @@ class NeuralNet:
         self.epochs = epochs
     
     def dataProduce(self):
+        import numpy as np
         from sklearn.model_selection import train_test_split
         fetchData = dataPrepare()
-        self.X,self.y = fetchData.deepLearningInput(self.path)
+        self.X,self.y = fetchData.deepLearningInput()
         self.X_train,self.X_test,self.y_train,self.y_test = train_test_split(self.X,self.y,test_size=0.3,shuffle=True, random_state=34)
         return self.X_train, self.X_test, self.y_train, self.y_test
 
@@ -67,18 +79,18 @@ class NeuralNet:
     def trainCalculation(self,epochs):
         self.X_train,self.X_test,self.y_train,self.y_test = self.dataProduce()
         x_train = Variable(torch.from_numpy(self.X_train)).float()
-        y_train = Variable(torch.from_numpy(self.y_train.to_numpy())).long()
+        y_train = Variable(torch.from_numpy(self.y_train.values)).long()
         train_loss,train_acc = [],[] 
 
-        model = Model(self.input_dim, self.hidden_layer, self.output_dim)
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+        self.model = Model(self.input_dim, self.hidden_layer, self.output_dim)
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.01)
         criterion = nn.CrossEntropyLoss()
         
         # Calculating the model loss and accuracy for train dataset
-        model.train()
+        self.model.train()
         for epoch in range(epochs):
             optimizer.zero_grad()
-            y_pred = model(x_train)
+            y_pred = self.model(x_train)
             loss = criterion(y_pred, y_train)
             print ("epoch #",epoch)
             print ("loss: ", loss.item())
@@ -96,20 +108,20 @@ class NeuralNet:
         return max(train_acc)
 
     def testCaluculation(self):
-        torch.manual_seed(0)
-        self.X_train,self.X_test,self.y_train,self.y_test = self.dataProduce()
+        # torch.manual_seed(0)
+        # self.X_train,self.X_test,self.y_train,self.y_test = self.dataProduce()
         test_loss,test_acc = 0,0
 
-        model = Model(self.input_dim, self.hidden_layer, self.output_dim)
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+        ##model = Model(self.input_dim, self.hidden_layer, self.output_dim)
+        # optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
         criterion = nn.CrossEntropyLoss()
 
-        model.eval()
+        self.model.eval()
         x_test = Variable(torch.from_numpy(self.X_test)).float()
         y_test = Variable(torch.from_numpy(self.y_test.to_numpy())).long()
 
         with torch.no_grad():
-            y_pred = model(x_test)
+            y_pred = self.model(x_test)
             loss = criterion(y_pred, y_test)
             pred = torch.max(y_pred, 1)[1].eq(y_test).sum()
             print ("Test loss: ", loss.item())
@@ -132,7 +144,8 @@ class NeuralNet:
         plt.pause(3)
         plt.close()
         plt.show()
+        return test
 
 
 if __name__ == '__main__':
-    NeuralNet('YoutubeComplete.csv',1000,100,2,30).run()
+    NeuralNet('YoutubeComplete.csv',1000,5,2,10).run()

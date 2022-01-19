@@ -1,11 +1,13 @@
+from statistics import mode
 import sys
 sys.path.insert(0, 'Code/Preprocess')
 
 import warnings
 warnings.filterwarnings("ignore")
 
-from preprocess import Preprocess
+from preprocess import Parser,Preprocess
 
+path = 'YouTubeComplete.csv'
 class dataPrepare:
     '''
     A class where we vecorise the dataset with the help of tfidf vectorizer and then we use the traditional traintest split method for generating the
@@ -28,7 +30,7 @@ class dataPrepare:
         vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
 
         self.data = Preprocess()
-        self.data = self.data.preprocessMethod(path)
+        self.data = self.data.preprocessMethod()
         
         self.feature = vec.fit_transform(self.data.CONTENT)
         
@@ -46,11 +48,8 @@ class dataPrepare:
 
         return self.X_train, self.X_test, self.y_train, self.y_test
     
-    def deepLearningInput(self,path):
+    def deepLearningInput(self,typeModel=None):
         """Input to for our deep learning algorithms
-
-        Args:
-            path (String): Path of our daatset
 
         Returns:
             DataFrame: returns the input for our algorithms(DataFrame/DataSeries)
@@ -62,10 +61,15 @@ class dataPrepare:
         
         # vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
 
-        self.data = Preprocess()
-        self.data = self.data.preprocessMethod(path)
+        self.data = Parser()
+        self.data = self.data.loadData()
+        
         t.fit_on_texts(self.data.CONTENT)
-        self.feature = t.texts_to_matrix(self.data.CONTENT, mode='tfidf')
+        
+        if typeModel == 'lstm':
+            self.feature = t.texts_to_sequences(self.data.CONTENT)
+        else:
+            self.feature = t.texts_to_matrix(self.data.CONTENT, mode='tfidf')
 
         self.X = self.feature
         self.y = self.data.CLASS
