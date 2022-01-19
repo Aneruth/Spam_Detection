@@ -118,47 +118,61 @@ class LSTMImplement:
         self.output_dim = output_dim
 
     def run(self):
+        from torch.utils.data import DataLoader
+        from sklearn.model_selection import train_test_split
         fetchData = dataPrepare()
         X_train, X_test, y_train, y_test =  fetchData.Vectorizer(self.path)
-        
         x_train,x_test,y_train,y_test = Data(self.path).getData()
+        x_val,_,y_val,_ = train_test_split(x_train,y_train,random_state=100,test_size=0.5)
         input_dimension = X_train.shape[1]
         model = LSTM(input_dim=input_dimension, hidden_dim=self.hidden_dim, output_dim=self.output_dim, num_layers=self.num_layers)
 
-        loss_fn = torch.nn.MSELoss()
-        # print(f"Type of X_train {type(X_train)}")
-        optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
-        print(model)
+        # https://discuss.pytorch.org/t/valueerror-target-size-torch-size-16-must-be-the-same-as-input-size-torch-size-16-1/55232
+        y_train = y_train.unsqueeze(1)
+        loss_fn = torch.nn.CrossEntropyLoss()
+
+        train_dataset = Dataset(x_train, y_train)
+        dataloader = DataLoader(train_dataset,batch_size=16, shuffle=True)
+        optimiser = torch.optim.Adam(model.parameters(), lr=0.001)
+        
         print(len(list(model.parameters())))
         for i in range(len(list(model.parameters()))):
             print(list(model.parameters())[i].size())
 
-        num_epochs = 1000
+        num_epochs = 100
         loss_val  = np.zeros(num_epochs)
         acc_val  = np.zeros(num_epochs)
-
+        
         for t in range(num_epochs):
-            # Forward pass
-            y_train_pred = model(x_train)
+            model.train()
+            for idx, (X_batch, Y_batch) in enumerate(dataloader):
+                # Forward pass
+                output = model(X_batch)  # conduct forward pass  
+                # y_train_pred = model(batch)
 
-            loss = loss_fn(y_train_pred, y_train)
-            if t % 10 == 0 and t !=0:
-                print(f"Epoch {t} MSE is {loss.item()}")
-            loss_val[t] = loss.item()
+                loss = loss_fn(output, Y_batch)
+                loss += 0.001 * sum(p.abs().sum() for p in model.parameters())
+                # if t % 10 == 0 and t !=0:
+                #     print(f"Epoch {t} MSE is {loss.item()}")
+                loss_val[t] = loss.item()
+
+                # Zero out gradient, else they will accumulate between epochs
+                optimiser.zero_grad()
+
+                # Backward pass
+                loss.backward()
+
+                # Update parameters
+                optimiser.step()
             
-            pred = torch.max(y_train_pred, 1)[1].eq(y_train).sum()
-            # pred = model_accuracy(y_train_pred,y)
-            if t % 10 == 0 and t !=0:
-                print(f"Epoch {t} accuracy(%) is {(100*pred/len(y_train)).item()}")
-            acc_val[t] = (100*pred/len(y_train)).item()
-            # Zero out gradient, else they will accumulate between epochs
-            optimiser.zero_grad()
+            with torch.no_grad():  # no need to calculate gradients when assessing accuracy
 
-            # Backward pass
-            loss.backward()
-
-            # Update parameters
-            optimiser.step()
+                model.eval()
+                pred_train = model(x_train).numpy().argmax(axis=1)
+                train_acc = (pred_train == y_train.numpy()).mean()
+                pred_val = model(x_val).numpy().argmax(axis=1)
+                val_acc = (pred_val == y_val.numpy()).mean()
+                acc_val[t] = val_acc
         
         immedDir = Path(__file__).parent.parent
         # parentDir = os.path.dirname(abspath(immedDir))

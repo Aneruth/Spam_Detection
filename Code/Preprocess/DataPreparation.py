@@ -56,13 +56,16 @@ class dataPrepare:
             DataFrame: returns the input for our algorithms(DataFrame/DataSeries)
         """
         from sklearn.feature_extraction.text import TfidfVectorizer
+        from keras.preprocessing.text import Tokenizer
+
+        t = Tokenizer(num_words=1000)
         
-        vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
+        # vec = TfidfVectorizer(encoding = "latin-1", strip_accents = "unicode", stop_words = "english")
 
         self.data = Preprocess()
         self.data = self.data.preprocessMethod(path)
-        
-        self.feature = vec.fit_transform(self.data.CONTENT)
+        t.fit_on_texts(self.data.CONTENT)
+        self.feature = t.texts_to_matrix(self.data.CONTENT, mode='tfidf')
 
         self.X = self.feature
         self.y = self.data.CLASS
