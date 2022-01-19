@@ -72,5 +72,5 @@ class ExploratoryDataAnalysis:
 
 
 
-if __name__ == '__main__':
-    ExploratoryDataAnalysis.visualise()
+# if __name__ == '__main__':
+#     ExploratoryDataAnalysis.visualise()

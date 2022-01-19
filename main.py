@@ -1,9 +1,9 @@
 import sys,os
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 sys.path.insert(0,os.path.join('Code/Models'))
 
-import SupportVectorMachine,NaiveBayes,RandomForest,NeuralNetwork,lstm
+import SupportVectorMachine,NaiveBayes,RandomForest,nnPytorch,lstm
 
 data = 'YoutubeComplete.csv'
 
@@ -14,8 +14,6 @@ rf = RandomForest.randomForest(data).metrics()
 
 nb = NaiveBayes.NaiveBayes(data).naiveBayes()
 
-nerural = NeuralNetwork.NeuralNet(data).metrices()
+nerural = nnPytorch.NeuralNet(data,1000,100,2,30).run()
 
-rnn = lstm.LSTMImplement(data,28,4,1).run()
-
-nerural = NeuralNetwork.NeuralNetPca(data).nnPCA()
+rnn = lstm.LSTMImplement().run()
