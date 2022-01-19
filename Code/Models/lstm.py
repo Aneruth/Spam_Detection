@@ -100,8 +100,9 @@ class LSTMImplement:
             os.mkdir(os.path.join(immedDir, "Images/LSTM"))
         
         self.plotGraph(hist.history['acc'],"Accuracy")
-        self.plotGraph(hist.history['loss'],"Loss")
+        self.plotGraph(hist.history['val_acc'],"Validataion Accuracy")
+        
+        return max(hist.history['acc'])
 
-
-if __name__ == '__main__':
-    LSTMImplement().run()
+# if __name__ == '__main__':
+#     LSTMImplement().run()

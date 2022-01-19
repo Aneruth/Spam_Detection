@@ -69,7 +69,7 @@ class dataPrepare:
         if typeModel == 'lstm':
             self.feature = t.texts_to_sequences(self.data.CONTENT)
         else:
-            self.feature = t.texts_to_matrix(self.data.CONTENT)
+            self.feature = t.texts_to_matrix(self.data.CONTENT, mode='tfidf')
 
         self.X = self.feature
         self.y = self.data.CLASS
