@@ -31,11 +31,13 @@ python3 -m vevn [virualenvname]
 
 To activate the `virtual environment`:
 
-```Mac OS
+For Mac OS profile
+```
 source [virualenvname]\bin\activate
 ```
-```Windows
-source [virualenvname]\Scripts\activate
+For Windows profile
+```
+[virualenvname]\Scripts\activate
 ```
 Once you have installed and activated your virtualenv you need to intall the requirements. To do this:
 
