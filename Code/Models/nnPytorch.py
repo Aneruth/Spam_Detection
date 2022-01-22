@@ -24,7 +24,7 @@ class Model(nn.Module):
     def forward(self,x):
         out = F.relu(self.l1(x)) # Layer 1
         out = F.relu(self.l2(out)) # Layer 2
-        out = self.l3(out) # output layer
+        out = F.sigmoid(self.l3(out)) # output layer
         return out
 
 class NeuralNet:
