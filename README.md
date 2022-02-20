@@ -26,7 +26,7 @@ brew install python3
 To create a `virtual environment`:
 
 ```
-python3 -m vevn [virualenvname]
+python3 -m venv [virualenvname]
 ```
 
 To activate the `virtual environment`:
