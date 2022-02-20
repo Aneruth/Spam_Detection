@@ -89,15 +89,16 @@ class NeuralNet:
         # Calculating the model loss and accuracy for train dataset
         self.model.train()
         for epoch in range(epochs):
-            optimizer.zero_grad()
-            y_pred = self.model(x_train)
-            loss = criterion(y_pred, y_train)
-            print ("epoch #",epoch)
-            print ("loss: ", loss.item())
-            train_loss.append(loss.item())
+            for batch in range(10):
+                optimizer.zero_grad()
+                y_pred = self.model(x_train)
+                loss = criterion(y_pred, y_train)
+                print ("epoch #",epoch)
+                print ("loss: ", loss.item())
+                train_loss.append(loss.item())
 
-            pred = torch.max(y_pred, 1)[1].eq(y_train).sum()
-            print ("acc:(%) ", (100*pred/len(x_train)).item())
+                pred = torch.max(y_pred, 1)[1].eq(y_train).sum()
+                print ("acc:(%) ", (100*pred/len(x_train)).item())
             
             train_acc.append((100*pred/len(x_train)).item())
             loss.backward()
