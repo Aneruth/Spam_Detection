@@ -1,6 +1,6 @@
 from statistics import mode
 import sys
-sys.path.insert(0, 'Code/Preprocess')
+sys.path.insert(0, 'spam_classifier/Preprocess')
 
 import warnings
 warnings.filterwarnings("ignore")

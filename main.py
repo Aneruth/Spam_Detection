@@ -1,7 +1,7 @@
 import sys,os
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-sys.path.insert(0,os.path.join('Code/Models'))
+sys.path.insert(0, os.path.join('spam_classifier/Models'))
 
 import SupportVectorMachine,NaiveBayes,RandomForest,nnPytorch,lstm
 

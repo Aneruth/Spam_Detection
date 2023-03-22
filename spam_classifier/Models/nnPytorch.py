@@ -4,7 +4,7 @@ from pathlib import Path
 from turtle import width
 
 from numpy import block
-sys.path.insert(0,os.path.join('Code/Preprocess'))
+sys.path.insert(0,os.path.join('spam_classifier/Preprocess'))
 from DataPreparation import dataPrepare
 
 # Package for our NN model
@@ -28,7 +28,7 @@ class Model(nn.Module):
         return out
 
 class NeuralNet:
-    """Code inspired from https://www.kaggle.com/shivammehta007/spam-not-spam-classifier-with-pytorch and did some modifications.
+    """spam_classifier inspired from https://www.kaggle.com/shivammehta007/spam-not-spam-classifier-with-pytorch and did some modifications.
 
     """
     def __init__(self,path,input_dim,hidden_layer,output_dim,epochs) -> None:
@@ -140,7 +140,7 @@ class NeuralNet:
         plt.bar(vals,[train,test])
         plt.title("Test Train accuracy")
         # plt.xlabel()
-        plt.savefig('Code/Images/NeuralNetwork/Test Train accuracy.png')
+        plt.savefig('spam_classifier/Images/NeuralNetwork/Test Train accuracy.png')
         plt.show(block=False)
         plt.pause(3)
         plt.close()

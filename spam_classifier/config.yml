@@ -1,0 +1,23 @@
+# Package Overview
+package_name: svce_nlp_demo # change this according to your package name
+
+# Data Files
+data_dir: spam_classifier/dataset
+
+# The variable we are attempting to predict (class)
+target: CLASS # change this according to your target variable
+
+pipeline_name: spam_classifier
+pipeline_save_file: spam_classifier_output_v
+
+features:
+  - CONTENT
+
+# set train/test split
+test_size: 0.33
+
+# to set the random seed
+random_state: 101
+
+alpha: 0.001
+

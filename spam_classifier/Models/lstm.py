@@ -6,7 +6,7 @@ from pathlib import Path
 from keras.layers import LSTM, Embedding, Dense, Flatten
 from keras.models import Sequential
 
-sys.path.insert(0,os.path.join('Code/Preprocess'))
+sys.path.insert(0,os.path.join('spam_classifier/Preprocess'))
 
 import tensorflow as tf # Adding padding to our dataset (train and test models)
 import numpy as np

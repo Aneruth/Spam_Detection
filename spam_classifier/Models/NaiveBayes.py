@@ -1,7 +1,7 @@
 from posixpath import abspath
 import sys,os
 from pathlib import Path
-sys.path.insert(0,os.path.join('Code/Preprocess'))
+sys.path.insert(0,os.path.join('spam_classifier/Preprocess'))
 from DataPreparation import dataPrepare
 
 import warnings
