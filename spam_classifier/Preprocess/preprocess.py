@@ -138,14 +138,14 @@ class Preprocess:
         self.dataset[self.data.feature] = self.dataset[self.data.feature].apply(lambda x: ' '.join(
             [lem.lemmatize(word) for word in x.split()]))
 
-    def apply(self):
-        self.make_lowercase()
-        self.remove_punctuation()
-        self.remove_stopwords()
-        self.remove_numbers()
-        self.stem_words()
-
-        print(self.dataset.head(10))
+    # def apply(self):
+    #     self.make_lowercase()
+    #     self.remove_punctuation()
+    #     self.remove_stopwords()
+    #     self.remove_numbers()
+    #     self.stem_words()
+    #
+    #     print(self.dataset.head(10))
 
 
 if __name__ == '__main__':
