@@ -1,14 +1,9 @@
-"""
-This file is for parsing and preprocessing the dataset. Sice we have five dataset we can't explicitly 
-call the function or implement the method so we are creating a class where ............. (yet to rephrase it)
-"""
-import logging
 import warnings
 import typing as t
-import re
 import string
 import os
-from nltk.stem import PorterStemmer
+import nltk
+from nltk.stem import WordNetLemmatizer
 import joblib
 import pandas as pd
 from nltk.tokenize import word_tokenize
@@ -18,6 +13,8 @@ from sklearn.pipeline import Pipeline
 from spam_classifier import __version__ as _version
 from spam_classifier.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 
+nltk.download("wordnet")
+nltk.download("omw-1.4")
 warnings.filterwarnings("ignore")
 
 
@@ -34,7 +31,7 @@ class Parser:
         if len(self.col) == 1:
             self.feature = self.col[0]
 
-    def load_dataset(self, *, file_name: str) -> pd.DataFrame:
+    def load_dataset(self, *args) -> pd.DataFrame:
         """Load the dataset from the path.
         @param file_name: Name of the file to be loaded.
         @return: A pandas dataframe.
@@ -96,8 +93,8 @@ class Preprocess:
     """
     A method where we remove all the stopwords,numerics,conjunction,preposition,stemming, and we tokenize the words
     in our dataset.
-    This function requires nlp packages such as nltk.corpus, stemmer package (PorterStemmer), Regex, String and
-    nltk.tokenize for tokenization.
+    This function requires nlp packages such as nltk.corpus, lematize package (WordNetLemmatizer), String and
+    nltk.tokenize for word tokenization.
     """
 
     def __init__(self):
@@ -137,9 +134,9 @@ class Preprocess:
         """Stemming the words in the dataset
         @return: None
         """
-        stemmer = PorterStemmer()
+        lem = WordNetLemmatizer()
         self.dataset[self.data.feature] = self.dataset[self.data.feature].apply(lambda x: ' '.join(
-            [stemmer.stem(word) for word in x.split()]))
+            [lem.lemmatize(word) for word in x.split()]))
 
     def apply(self):
         self.make_lowercase()
@@ -149,15 +146,6 @@ class Preprocess:
         self.stem_words()
 
         print(self.dataset.head(10))
-
-    # def preprocessMethod(self):
-    #     # TODO: Split this method into smaller methods
-    #
-    #     # Stemming
-    #     stemmer = PorterStemmer()
-    #     stopWordsRemove = [stemmer.stem(i) for i in stopWordsRemove]
-    #     dataset.CONTENT = stopWordsRemove
-    #     return dataset
 
 
 if __name__ == '__main__':
