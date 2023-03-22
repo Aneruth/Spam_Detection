@@ -60,9 +60,6 @@ class Parser:
         save_file_name = f"{config.app_config.pipeline_save_file}{_version}.pkl"
         save_path = TRAINED_MODEL_DIR / save_file_name
 
-        if not os.path.exists(save_path):
-            os.makedirs(save_path)
-
         self.remove_old_pipelines(files_to_keep=[save_file_name])
         joblib.dump(pipeline_to_persist, save_path)
 
@@ -137,17 +134,3 @@ class Preprocess:
         lem = WordNetLemmatizer()
         self.dataset[self.data.feature] = self.dataset[self.data.feature].apply(lambda x: ' '.join(
             [lem.lemmatize(word) for word in x.split()]))
-
-    # def apply(self):
-    #     self.make_lowercase()
-    #     self.remove_punctuation()
-    #     self.remove_stopwords()
-    #     self.remove_numbers()
-    #     self.stem_words()
-    #
-    #     print(self.dataset.head(10))
-
-
-if __name__ == '__main__':
-    preprocess = Preprocess()
-    preprocess.apply()
