@@ -10,6 +10,7 @@ class NaiveBayes:
     def __init__(self):
         self.y_hat = None
         self.y_test = None
+        self.model = None
 
     def run_model(self):
         """The Bayes' Theorem is used to preprocess for classification techniques known as 
@@ -17,9 +18,9 @@ class NaiveBayes:
         namely that each pair of features being classified is independent of the others.
         """
         X_train, X_test, y_train, self.y_test = train_pipeline.vectorize()
-        nb = GaussianNB()
-        nb.fit(X_train.toarray(), y_train)
-        self.y_hat = nb.predict(X_test.toarray())
+        self.model = GaussianNB()
+        self.model.fit(X_train.toarray(), y_train)
+        self.y_hat = self.model.predict(X_test.toarray())
 
     def get_score(self) -> dict:
         """Get the accuracy score of the model
@@ -38,8 +39,22 @@ class NaiveBayes:
             "f1": f1
         }
 
+    def predict_text(self, text: str) -> str:
+        """Predict the text
+
+        Args:
+            text (str): The text to be predicted
+
+        Returns:
+            str: The predicted text
+        """
+        mapping = {0: "ham", 1: "spam"}
+        return mapping[train_pipeline.predict_text(self.model, text)[0]]
+
 
 if __name__ == "__main__":
     nb = NaiveBayes()
     nb.run_model()
     print(nb.get_score())
+
+    print(nb.predict_text("Hi there, how are you doing?"))

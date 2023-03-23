@@ -5,6 +5,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
+# Since we are using the text as input, we need to convert it to a sparse matrix
+# We are using the tfidf method to convert our text to a sparse matrix
+tfidf = TfidfVectorizer(encoding="latin-1", strip_accents="unicode", stop_words="english")
+
+
 def run_training() -> tuple:
     """ Train the model
     @return: A tuple of X_train, X_test, y_train, y_test
@@ -39,10 +44,6 @@ def vectorize() -> tuple:
     """
     X_train, X_test, y_train, y_test = run_training()
 
-    # Since we are using the text as input, we need to convert it to a sparse matrix
-    # We are using the tfidf method to convert our text to a sparse matrix
-    tfidf = TfidfVectorizer(encoding="latin-1", strip_accents="unicode", stop_words="english")
-
     # Fit and transform the training data
     # For strange reason I need to convert the list to a string or a numpy array
     # NOTE: TFIDF is not working with pandas dataframe
@@ -51,3 +52,17 @@ def vectorize() -> tuple:
     X_ts_transform = tfidf.transform(X_test['CONTENT'])
 
     return X_tr_transform, X_ts_transform, y_train, y_test
+
+
+def predict_text(model: object, text: str) -> str:
+    """Predict the text
+
+    Args:
+        model (object): The model to be used
+        text (str): The text to be predicted
+
+    Returns:
+        str: The predicted text
+    """
+    text = tfidf.transform([text])
+    return model.predict(text.toarray())
