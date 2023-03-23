@@ -1,7 +1,6 @@
 import warnings
 import typing as t
 import string
-import os
 import nltk
 from nltk.stem import WordNetLemmatizer
 import joblib
@@ -13,8 +12,13 @@ from sklearn.pipeline import Pipeline
 from spam_classifier import __version__ as _version
 from spam_classifier.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 
-nltk.download("wordnet")
-nltk.download("omw-1.4")
+try:
+    # Attempt to import wordnet from NLTK
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    # If wordnet is not installed, download and install it
+    nltk.download('wordnet')
+
 warnings.filterwarnings("ignore")
 
 
@@ -94,9 +98,9 @@ class Preprocess:
     nltk.tokenize for word tokenization.
     """
 
-    def __init__(self):
+    def __init__(self, dataset):
         self.data = Parser()
-        self.dataset = self.data.load_dataset()
+        self.dataset = dataset
 
     def make_lowercase(self) -> None:
         """Make text lowercase
