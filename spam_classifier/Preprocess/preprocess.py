@@ -8,6 +8,7 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from pathlib import Path
+
 from sklearn.pipeline import Pipeline
 from spam_classifier import __version__ as _version
 from spam_classifier.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
@@ -19,7 +20,8 @@ except LookupError:
     # If wordnet is not installed, download and install it
     nltk.download('wordnet')
 
-warnings.filterwarnings("ignore")
+pd.options.mode.chained_assignment = None
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 class Parser:
@@ -107,34 +109,34 @@ class Preprocess:
 
         @return: None
         """
-        self.dataset[self.data.feature] = self.dataset[self.data.feature].str.lower()
+        self.dataset.loc[:, self.data.feature] = self.dataset.loc[:, self.data.feature].str.lower()
 
     def remove_punctuation(self) -> None:
         """Remove punctuation from the dataset and replace it with empty string
         @return: A pandas series with punctuation removed
         """
-        self.dataset[self.data.feature] = self.dataset[self.data.feature].str. \
-            translate(str.maketrans('', '', string.punctuation))
+        self.dataset.loc[:, self.data.feature] = self.dataset.loc[:, self.data.feature].str.translate(
+            str.maketrans('', '', string.punctuation))
 
     def remove_stopwords(self) -> None:
         """Remove stopwords from dataset and rejoins the words without stopwords
         @return: None
         """
         stop_words = set(stopwords.words('english'))
-        self.dataset[self.data.feature] = self.dataset[self.data.feature].apply(lambda x: ' '.join(
+        self.dataset.loc[:, self.data.feature] = self.dataset.loc[:, self.data.feature].apply(lambda x: ' '.join(
             [word for word in word_tokenize(x) if word not in stop_words]))
 
     def remove_numbers(self) -> None:
         """Remove numbers from the dataset and replace it with empty string
         @return: None
         """
-        self.dataset[self.data.feature] = self.dataset[self.data.feature].str \
-            .replace("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", '')
+        self.dataset.loc[:, self.data.feature] = self.dataset.loc[:, self.data.feature].str \
+            .replace("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", '', regex=True)
 
     def stem_words(self) -> None:
         """Stemming the words in the dataset
         @return: None
         """
         lem = WordNetLemmatizer()
-        self.dataset[self.data.feature] = self.dataset[self.data.feature].apply(lambda x: ' '.join(
+        self.dataset.loc[:, self.data.feature] = self.dataset.loc[:, self.data.feature].apply(lambda x: ' '.join(
             [lem.lemmatize(word) for word in x.split()]))

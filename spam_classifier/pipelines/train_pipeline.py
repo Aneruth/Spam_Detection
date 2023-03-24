@@ -54,15 +54,14 @@ def vectorize() -> tuple:
     return X_tr_transform, X_ts_transform, y_train, y_test
 
 
-def predict_text(model: object, text: str) -> str:
+def transform_text(text: str) -> str:
     """Predict the text
 
     Args:
-        model (object): The model to be used
         text (str): The text to be predicted
 
     Returns:
         str: The predicted text
     """
     text = tfidf.transform([text])
-    return model.predict(text.toarray())
+    return text.toarray()

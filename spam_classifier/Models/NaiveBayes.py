@@ -1,4 +1,5 @@
 import warnings
+
 from sklearn.naive_bayes import GaussianNB
 from spam_classifier.pipelines import train_pipeline
 from sklearn.metrics import *
@@ -49,12 +50,5 @@ class NaiveBayes:
             str: The predicted text
         """
         mapping = {0: "ham", 1: "spam"}
-        return mapping[train_pipeline.predict_text(self.model, text)[0]]
-
-
-if __name__ == "__main__":
-    nb = NaiveBayes()
-    nb.run_model()
-    print(nb.get_score())
-
-    print(nb.predict_text("Hi there, how are you doing?"))
+        result = self.model.predict(train_pipeline.transform_text(text))
+        return mapping[result[0]]
