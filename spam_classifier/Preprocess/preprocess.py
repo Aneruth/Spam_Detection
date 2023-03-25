@@ -16,6 +16,7 @@ from spam_classifier.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 try:
     # Attempt to import wordnet from NLTK
     nltk.data.find('corpora/wordnet')
+    print('Corpus data exists')
 except LookupError:
     # If wordnet is not installed, download and install it
     nltk.download('wordnet')
