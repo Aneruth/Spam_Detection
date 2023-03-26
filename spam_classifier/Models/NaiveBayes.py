@@ -43,6 +43,24 @@ class NaiveBayes:
             "f1": f1
         }
 
+    def get_confusion_matrix(self) -> dict:
+        """Get the confusion matrix of the model
+
+        Returns:
+            dict: returns dictionary of confusion matrix
+        """
+        cnf_matrix = confusion_matrix(self.y_test, self.y_hat)
+        TP = cnf_matrix[0][0]
+        FP = cnf_matrix[0][1]
+        FN = cnf_matrix[1][0]
+        TN = cnf_matrix[1][1]
+        return {
+            "TP": TP,
+            "FP": FP,
+            "FN": FN,
+            "TN": TN
+        }
+
     def save_model(self):
         """Save the model
         """
@@ -83,5 +101,5 @@ class NaiveBayes:
             str: The predicted text
         """
         mapping = {0: "ham", 1: "spam"}
-        result = self.model.predict(train_pipeline.transform_text(text))
+        result = self.model.predict(train_pipeline.transform_text(text.lower()))
         return mapping[result[0]]
