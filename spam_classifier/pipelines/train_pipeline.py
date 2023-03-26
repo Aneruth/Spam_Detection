@@ -1,3 +1,5 @@
+from typing import List
+
 from spam_classifier.config.core import config
 from spam_classifier.pipelines.pipeline import CreatePipeline
 from spam_classifier.Preprocess.preprocess import Parser
@@ -54,7 +56,7 @@ def vectorize() -> tuple:
     return X_tr_transform, X_ts_transform, y_train, y_test
 
 
-def transform_text(text: str) -> str:
+def transform_text(text: str) -> List[str]:
     """Predict the text
 
     Args:
@@ -63,5 +65,6 @@ def transform_text(text: str) -> str:
     Returns:
         str: The predicted text
     """
+    X_tr_transform, *_ = vectorize()
     text = tfidf.transform([text])
     return text.toarray()

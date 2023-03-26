@@ -10,6 +10,8 @@ target: CLASS # change this according to your target variable
 pipeline_name: spam_classifier
 pipeline_save_file: spam_classifier_output_v
 
+model_save_name: model.pkl
+
 features:
   - CONTENT
 
