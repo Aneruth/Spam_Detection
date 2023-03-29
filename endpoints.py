@@ -2,6 +2,7 @@ import os
 from spam_classifier.Models.NaiveBayes import NaiveBayes
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.openapi.utils import get_openapi
 
 app = FastAPI()
 model = NaiveBayes()
@@ -28,6 +29,22 @@ class ConfusionMatrix(BaseModel):
     FP: int
     FN: int
     TN: int
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Custom API Index",
+        version="1.0.0",
+        description="This is a custom API index page for my FastAPI app.",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
 
 
 @app.get("/")
