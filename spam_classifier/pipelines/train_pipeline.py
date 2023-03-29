@@ -65,6 +65,5 @@ def transform_text(text: str) -> List[str]:
     Returns:
         str: The predicted text
     """
-    X_tr_transform, *_ = vectorize()
     text = tfidf.transform([text])
     return text.toarray()
