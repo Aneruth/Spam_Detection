@@ -9,16 +9,19 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 ADD . /app
 
+COPY run.sh /app/
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Run the shell script to start the app
-RUN chmod +x /app/run.sh
-RUN chown -R appuser:appuser ./
+# Set environment variables
+ENV PORT=8080
+ENV HOST=0.0.0.0
 
 # Switch to the appuser user
 USER appuser
 
-# Run the shell script to start the app
-CMD ["/app/run.sh"]
+# Start the app using ENTRYPOINT
+ENTRYPOINT ["/bin/bash", "/app/run.sh"]
+

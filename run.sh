@@ -1,1 +1,1 @@
-uvicorn endpoints:app --reload "$PORT"
+uvicorn endpoints:app --reload --host "$HOST" --port "$PORT"

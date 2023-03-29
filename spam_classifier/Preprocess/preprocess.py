@@ -16,9 +16,13 @@ from spam_classifier.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 try:
     # Attempt to import wordnet from NLTK
     nltk.data.find('corpora/wordnet')
+    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('corpora/stopwords')
     print('Corpus data exists')
 except LookupError:
     # If wordnet is not installed, download and install it
+    nltk.download('punkt')
+    nltk.download('stopwords')
     nltk.download('wordnet')
 
 pd.options.mode.chained_assignment = None
